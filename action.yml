@@ -1,4 +1,4 @@
-name: 'ModifyTabs'
+name: 'modify-tabs'
 description: '修改 tab'
 inputs:
   url:
@@ -6,6 +6,18 @@ inputs:
     required: true
   op_type:
     description: '操作类型'
+    required: true
+  src:
+    description: '项目 src'
+    default: './src'
+  dist:
+    description: '图标文件名称'
+    default: './src/static/tab/cts_tab.png'
+  page_path:
+    description: 'tab path'
+    default: 'pages/cts/index'
+  tab_name:
+    description: 'tab name'
     required: true
 outputs:
 runs:
