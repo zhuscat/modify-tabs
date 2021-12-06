@@ -10,9 +10,9 @@ async function run() {
     const opType = core.getInput('op_type')
     core.debug(`操作类型 ${opType}`)
     const body = await got.get(imageUrl).buffer()
-    await fs.writeFile(path.join(__dirname, `./src/static/tab/cts_tab.png`), body)
+    await fs.writeFile(path.resolve(`./src/static/tab/cts_tab.png`), body)
     core.debug(`写入文件`)
-    const pagesFile = await fs.readFile(path.join(__dirname, './src/pages.json'))
+    const pagesFile = await fs.readFile(path.resolve('./src/pages.json'))
     const pages = JSON.parse(pagesFile)
     if (opType === 'WRITE') {
       const idx = pages.tabBar.list.findIndex(item => item.pagePath === 'pages/cts/index')
@@ -37,7 +37,7 @@ async function run() {
       core.debug(`移除 tab 成功`)
     }
 
-    fs.writeFile(path.join(__dirname, `./src/pages.json`), JSON.stringify(pages, null, 2))
+    fs.writeFile(path.resolve(`./src/pages.json`), JSON.stringify(pages, null, 2))
     core.debug(`更新 tab 成功`)
     core.setOutput()
   } catch (error) {
