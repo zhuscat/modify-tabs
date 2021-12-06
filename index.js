@@ -6,6 +6,7 @@ const path = require('path')
 async function run() {
   try {
     const imageUrl = core.getInput('url')
+    core.debug(`当前目录 ${__dirname}`)
     core.debug(`图片地址 ${imageUrl}`)
     const opType = core.getInput('op_type')
     core.debug(`操作类型 ${opType}`)
