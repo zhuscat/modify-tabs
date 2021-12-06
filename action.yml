@@ -1,13 +1,13 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'ModifyTabs'
+description: '修改 tab'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  url:
+    description: '图片的 URL'
     required: true
-    default: '1000'
+  op_type:
+    description: '操作类型'
+    required: true
 outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
 runs:
   using: 'node12'
   main: 'dist/index.js'
