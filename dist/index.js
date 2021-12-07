@@ -9518,7 +9518,6 @@ async function run() {
 
     fs.writeFileSync(path.resolve(src, 'pages.json'), JSON.stringify(pages, null, 2))
     core.debug(`更新 tab 成功`)
-    core.setOutput()
   } catch (error) {
     core.setFailed(error.message);
   }
