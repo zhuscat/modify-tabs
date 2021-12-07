@@ -19,7 +19,6 @@ inputs:
   tab_name:
     description: 'tab name'
     required: true
-outputs:
 runs:
   using: 'node12'
   main: 'dist/index.js'
