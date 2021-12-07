@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const got = require('got').default
-const fs = require('fs/promises')
+const fs = require('fs')
 const path = require('path')
 
 async function run() {
@@ -13,9 +13,9 @@ async function run() {
     const dist = core.getInput('dist')
     const pagePath = core.getInput('page_path')
     const body = await got.get(imageUrl).buffer()
-    await fs.writeFile(path.resolve(dist), body)
+    fs.writeFileSync(path.resolve(dist), body)
     core.debug(`写入文件`)
-    const pagesFile = await fs.readFile(path.resolve(src, 'pages.json'))
+    const pagesFile = fs.readFileSync(path.resolve(src, 'pages.json'))
     const pages = JSON.parse(pagesFile)
     const tabName = core.getInput('tab_name')
     const iconPath = path.relative(core.getInput('src'), dist)
@@ -43,7 +43,7 @@ async function run() {
       core.debug(`移除 tab 成功`)
     }
 
-    fs.writeFile(path.resolve(src, 'pages.json'), JSON.stringify(pages, null, 2))
+    fs.writeFileSync(path.resolve(src, 'pages.json'), JSON.stringify(pages, null, 2))
     core.debug(`更新 tab 成功`)
     core.setOutput()
   } catch (error) {
