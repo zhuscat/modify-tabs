@@ -27,6 +27,7 @@
   "dependencies": {
     "@actions/core": "^1.2.5",
     "dayjs": "^1.10.7",
+    "gogocode": "^1.0.40",
     "got": "^11.8.3"
   },
   "devDependencies": {
