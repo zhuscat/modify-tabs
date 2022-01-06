@@ -2,7 +2,6 @@ const core = require('@actions/core');
 const got = require('got').default
 const fs = require('fs')
 const path = require('path')
-const $ = require('gogocode')
 
 async function run() {
   try {
@@ -10,6 +9,8 @@ async function run() {
     core.debug(`图片地址 ${imageUrl}`)
     const opType = core.getInput('op_type')
     core.debug(`操作类型 ${opType}`)
+    const appName = core.getInput('app_name')
+    core.debug(`app name ${appName}`)
     const src = core.getInput('src')
     const dist = core.getInput('dist')
     const pagePath = core.getInput('page_path')
@@ -47,10 +48,11 @@ async function run() {
     fs.writeFileSync(path.resolve(src, 'pages.json'), JSON.stringify(pages, null, 2))
     core.debug(`更新 tab 成功`)
 
-    const extPath = path.resolve(src, 'services/ext/main.js')
+    const extPath = path.resolve('./config', appName, 'main.json')
     const messengerIndex = pages.tabBar.list.findIndex(item => item.pagePath === 'modules/tab-pages/messenger/index')
-    const ret = $.loadFile(extPath).replace('MESSENGER_TAB_INDEX: $_$', `MESSENGER_TAB_INDEX: ${messengerIndex}`).generate()
-    fs.writeFileSync(extPath, ret)
+    const ret = require(extPath)
+    ret.MESSENGER_TAB_INDEX = messengerIndex
+    fs.writeFileSync(extPath, JSON.stringify(ret, undefined, 2))
     core.debug(`更新 ext 文件成功`)
   } catch (error) {
     core.setFailed(error.message);
