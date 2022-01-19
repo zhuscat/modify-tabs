@@ -19,6 +19,9 @@ inputs:
   tab_name:
     description: 'tab name'
     required: true
+  app_name:
+    description: 'app name'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
