@@ -11,29 +11,27 @@ async function run() {
     core.debug(`操作类型 ${opType}`)
     const appName = core.getInput('app_name')
     core.debug(`app name ${appName}`)
-    const src = core.getInput('src')
-    const dist = core.getInput('dist')
     const pagePath = core.getInput('page_path')
     const body = await got.get(imageUrl).buffer()
-    fs.writeFileSync(path.resolve(dist), body)
+    fs.writeFileSync(path.resolve(`./src/static/tab/cts_tab_${appName}.png`), body)
     core.debug(`写入文件`)
-    const pagesFile = fs.readFileSync(path.resolve(src, 'pages.json'))
-    const pages = JSON.parse(pagesFile)
+    const tabFile = fs.readFileSync(path.resolve(`./src/config/${appName}/tab.json`))
+    let tabs = JSON.parse(tabFile)
     const tabName = core.getInput('tab_name')
-    const iconPath = path.relative(core.getInput('src'), dist)
+    const iconPath = path.relative(core.getInput('src'), `./src/static/tab/cts_tab_${appName}.png`)
     if (opType === 'WRITE') {
-      const idx = pages.tabBar.list.findIndex(item => item.pagePath === pagePath)
+      const idx = tabs.findIndex(item => item.pagePath === pagePath)
       if (idx > 0) {
         // 修改已经存在的
-        pages.tabBar.list[idx].text = tabName
-        pages.tabBar.list[idx].text = tabName
-        pages.tabBar.list[idx].iconPath = iconPath
-        pages.tabBar.list[idx].selectedIconPath = iconPath
+        tabs[idx].text = tabName
+        tabs[idx].text = tabName
+        tabs[idx].iconPath = iconPath
+        tabs[idx].selectedIconPath = iconPath
       } else {
-        const len = pages.tabBar.list.length
+        const len = tabs.length
         const insertIdx = Math.floor(len / 2)
         core.debug(`插入到第 ${insertIdx + 1} 个 tab`)
-        pages.tabBar.list.splice(insertIdx, 0, {
+        tabs.splice(insertIdx, 0, {
           pagePath: pagePath,
           text: tabName,
           iconPath,
@@ -41,15 +39,15 @@ async function run() {
         })
       }
     } else {
-      pages.tabBar.list = pages.tabBar.list.filter(item => item.pagePath !== pagePath)
+      tabs = tabs.filter(item => item.pagePath !== pagePath)
       core.debug(`移除 tab 成功`)
     }
 
-    fs.writeFileSync(path.resolve(src, 'pages.json'), JSON.stringify(pages, null, 2))
+    fs.writeFileSync(path.resolve(`./src/config/${appName}/tab.json`), JSON.stringify(tabs, null, 2))
     core.debug(`更新 tab 成功`)
 
     const extPath = path.resolve('./config', appName, 'main.json')
-    const messengerIndex = pages.tabBar.list.findIndex(item => item.pagePath === 'modules/tab-pages/messenger/index')
+    const messengerIndex = tabs.findIndex(item => item.pagePath === 'modules/tab-pages/messenger/index')
     const ret = require(extPath)
     ret.MESSENGER_TAB_INDEX = messengerIndex
     fs.writeFileSync(extPath, JSON.stringify(ret, undefined, 2))
