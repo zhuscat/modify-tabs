@@ -9488,7 +9488,7 @@ async function run() {
     const body = await got.get(imageUrl).buffer()
     fs.writeFileSync(path.resolve(`./src/static/tab/cts_tab_${appName}.png`), body)
     core.debug(`写入文件`)
-    const tabFile = fs.readFileSync(path.resolve(`./src/config/${appName}/tab.json`))
+    const tabFile = fs.readFileSync(path.resolve(`./config/${appName}/tab.json`))
     let tabs = JSON.parse(tabFile)
     const tabName = core.getInput('tab_name')
     const iconPath = path.relative(core.getInput('src'), `./src/static/tab/cts_tab_${appName}.png`)
@@ -9516,7 +9516,7 @@ async function run() {
       core.debug(`移除 tab 成功`)
     }
 
-    fs.writeFileSync(path.resolve(`./src/config/${appName}/tab.json`), JSON.stringify(tabs, null, 2))
+    fs.writeFileSync(path.resolve(`./config/${appName}/tab.json`), JSON.stringify(tabs, null, 2))
     core.debug(`更新 tab 成功`)
 
     const extPath = path.resolve('./config', appName, 'main.json')
